@@ -116,6 +116,11 @@ const Profile: React.FC = () => {
 const AppContent: React.FC = () => {
   // Safe Notification Logic
   useEffect(() => {
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  if (isIOS) {
+    console.log('Notifications disabled on iOS');
+    return;
+  }
     if ('Notification' in window && Notification.permission !== 'granted') {
       Notification.requestPermission();
     }
