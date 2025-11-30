@@ -33,4 +33,6 @@ export const DEFAULT_WATER_TARGET = 8; // glasses
 // 1. Go to https://dashboard.clerk.com
 // 2. Create an application
 // 3. Copy the 'Publishable Key' and paste it below or in your .env file
-export const VITE_CLERK_PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY || "pk_test_bG9naWNhbC1jaG93LTcxLmNsZXJrLmFjY291bnRzLmRldiQ";
+export const VITE_CLERK_PUBLISHABLE_KEY =
+  (import.meta as any).env.VITE_CLERK_PUBLISHABLE_KEY ||
+  "pk_test_bG9naWNhbC1jaG93LTcxLmNsZXJrLmFjY291bnRzLmRldiQ";
