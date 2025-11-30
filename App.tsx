@@ -114,35 +114,56 @@ const Profile: React.FC = () => {
 
 
 const AppContent: React.FC = () => {
-  // Notification Logic
+  // Safe Notification Logic
   useEffect(() => {
     if ('Notification' in window && Notification.permission !== 'granted') {
       Notification.requestPermission();
     }
 
-    const checkNotifications = () => {
-        const now = Date.now();
-        const lastWater = parseInt(localStorage.getItem('lastWaterNotif') || '0');
-        const lastActivity = parseInt(localStorage.getItem('lastActivityNotif') || '0');
+    const showNotification = (title: string, body: string) => {
+      if (Notification.permission !== 'granted') return;
       
-        const WATER_INTERVAL = 90 * 60 * 1000; // 1.5 hours
-        const ACTIVITY_INTERVAL = 120 * 60 * 1000; // 2 hours
-
-        // Check Water
-        if (now - lastWater > WATER_INTERVAL) {
-            if (Notification.permission === 'granted') {
-                new Notification("Madhumeh Mitra", { body: "Remember to Drink water!", icon: "/icon.png" });
-                localStorage.setItem('lastWaterNotif', now.toString());
-            }
+      try {
+        // Try service worker method first (for mobile)
+        if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+          navigator.serviceWorker.ready.then(registration => {
+            registration.showNotification(title, { 
+              body, 
+              icon: "/icon.png" 
+            });
+          }).catch(() => {
+            // Fallback: just skip notification on error
+            console.log('Notification skipped');
+          });
+        } else {
+          // Desktop fallback
+          new Notification(title, { body, icon: "/icon.png" });
         }
+      } catch (error) {
+        // Silently fail on unsupported devices
+        console.log('Notification not supported on this device');
+      }
+    };
 
-        // Check Activity
-        if (now - lastActivity > ACTIVITY_INTERVAL) {
-            if (Notification.permission === 'granted') {
-                new Notification("Madhumeh Mitra", { body: "Go for a walk or do some activity!", icon: "/icon.png" });
-                localStorage.setItem('lastActivityNotif', now.toString());
-            }
-        }
+    const checkNotifications = () => {
+      const now = Date.now();
+      const lastWater = parseInt(localStorage.getItem('lastWaterNotif') || '0');
+      const lastActivity = parseInt(localStorage.getItem('lastActivityNotif') || '0');
+    
+      const WATER_INTERVAL = 90 * 60 * 1000; // 1.5 hours
+      const ACTIVITY_INTERVAL = 120 * 60 * 1000; // 2 hours
+
+      // Check Water
+      if (now - lastWater > WATER_INTERVAL) {
+        showNotification("Madhumeh Mitra", "Remember to Drink water!");
+        localStorage.setItem('lastWaterNotif', now.toString());
+      }
+
+      // Check Activity
+      if (now - lastActivity > ACTIVITY_INTERVAL) {
+        showNotification("Madhumeh Mitra", "Go for a walk or do some activity!");
+        localStorage.setItem('lastActivityNotif', now.toString());
+      }
     };
 
     // Run check immediately on load, then every minute
@@ -151,6 +172,7 @@ const AppContent: React.FC = () => {
 
     return () => clearInterval(interval);
   }, []);
+
 
   return (
     <BrowserRouter>
