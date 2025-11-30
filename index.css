@@ -1,0 +1,102 @@
+/* Tailwind Directives */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom Madhu Styles */
+@layer base {
+  html {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply bg-gradient-to-br from-orange-50 to-amber-50 min-h-screen;
+  }
+}
+
+@layer components {
+  /* Buttons */
+  .btn-primary {
+    @apply bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0;
+  }
+  
+  .btn-secondary {
+    @apply bg-white/80 hover:bg-white border-2 border-orange-200 hover:border-orange-300 text-orange-700 font-semibold py-2.5 px-5 rounded-lg shadow-md backdrop-blur-sm transition-all duration-300;
+  }
+  
+  /* Cards */
+  .card {
+    @apply bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl border border-orange-100 hover:shadow-2xl transition-all duration-400 hover:-translate-y-1;
+  }
+  
+  .meal-card {
+    @apply card p-6 h-full flex flex-col;
+  }
+  
+  /* Food Items */
+  .food-item {
+    @apply flex items-center p-4 bg-gradient-to-r from-orange-50 to-amber-50 rounded-xl border border-orange-100 hover:shadow-md transition-all duration-200 hover:scale-[1.02];
+  }
+  
+  /* Nutrition Progress */
+  .progress-ring {
+    @apply relative inline-block;
+  }
+  
+  /* Forms */
+  .input-field {
+    @apply w-full px-4 py-3 border border-orange-200 rounded-xl bg-white/80 backdrop-blur-sm focus:border-orange-400 focus:ring-2 focus:ring-orange-200 focus:outline-none transition-all duration-300;
+  }
+  
+  .select-field {
+    @apply input-field appearance-none bg-white/90;
+  }
+}
+
+/* Responsive Utilities */
+@layer utilities {
+  .text-shadow {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .glass {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+}
+
+/* Animations */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-in {
+  animation: slideInUp 0.6s ease-out forwards;
+}
+
+/* Dark mode support (optional) */
+@media (prefers-color-scheme: dark) {
+  body {
+    @apply bg-gradient-to-br from-gray-900 via-orange-900/20 to-amber-900/20;
+  }
+  
+  .card {
+    @apply bg-gray-800/95 border-gray-700;
+  }
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
